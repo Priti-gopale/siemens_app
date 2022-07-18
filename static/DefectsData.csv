@@ -1,0 +1,17 @@
+ID,Title,CVSS,Created_date
+10551,This is a security defect 001,8.5,05-07-2022
+29447,This is a security defect 002,7.5,06-07-2022
+29439,This is a security defect 003,7.5,01-07-2022
+8968,This is a security defect 004,7.5,01-01-2022
+81026,This is a security defect 005,7.199999809,09-04-2022
+8955,This is a security defect 006,7.099999905,01-08-2021
+30279,This is a security defect 007,6.800000191,02-03-2022
+24347,This is a security defect 008,6.800000191,03-08-2021
+24345,This is a security defect 009,6.800000191,04-08-2021
+24333,This is a security defect 010,6.800000191,05-03-2022
+24327,This is a security defect 011,6.800000191,06-08-2021
+21844,This is a security defect 012,6.800000191,07-06-2022
+29428,This is a security defect 013,5.900000095,08-08-2021
+29424,This is a security defect 014,5.900000095,09-07-2021
+8972,This is a security defect 015,5.5,10-07-2022
+19824,This is a security defect 016,4.400000095,30-06-2021

@@ -1,0 +1,268 @@
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script type="text/javascript">
+    
+      
+  
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var df2 = '{{df|tojson}}'
+      var df3 = JSON.parse(df2)
+      var arr = []
+      arr.push(["Team Backlog", "Count"])
+      for (var i in df3)
+        arr.push([i, df3[i]])
+      console.log(arr)
+      var data = google.visualization.arrayToDataTable(arr);
+      var options = {
+        title: 'Team Backlog'
+      };
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+      chart.draw(data, options);
+      var chart3 = new google.visualization.BarChart(document.getElementById("barchart"));
+      chart3.draw(data, options);
+
+      var da2 = '{{da|tojson}}'
+      var da3 = JSON.parse(da2)
+      var arr2 = []
+      arr2.push(["Dashboard Category", "Count"])
+      for (var i in da3)
+        arr2.push([i, da3[i]])
+      console.log(arr2)
+      var data2 = google.visualization.arrayToDataTable(arr2);
+      var options2 = {
+        title: 'Dashboard Category'
+      };
+      var chart2 = new google.visualization.PieChart(document.getElementById('piechart2'));
+      chart2.draw(data2, options2);
+      var chart4 = new google.visualization.BarChart(document.getElementById("barchart2"));
+      chart4.draw(data2, options2);
+
+      var od2 = '{{od|tojson}}'
+      var od3 = JSON.parse(od2)
+      var arr3 = []
+      arr3.push(["overdue", "Count"])
+      for (var i in od3)
+        arr3.push([i, od3[i]])
+      console.log(arr3)
+      var data3 = google.visualization.arrayToDataTable(arr3);
+      var options3 = {
+        title: 'Overdue Defects'
+      };
+      var chart3 = new google.visualization.PieChart(document.getElementById('piechart3'));
+      chart3.draw(data3, options3);
+    }
+  </script>
+  
+
+</head>
+
+<body>
+  
+  <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+  
+<li class="nav-item">
+          <a class="nav-link" href="/table">Defects By Age</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/table2">Security Score</a>
+          </li>
+          <li class="nav-item">
+            <a  style="color:red"class="nav-link" href="/coverity">Coverity Issues</a>
+          </li>
+          
+      </ul>
+    </div>
+  </nav>
+  <button onclick="window.print()" id="mybutton" class=" btn btn-danger">Export</button>
+  <div >
+    <div align="center">
+
+  <div style="display: flex;justify-content:left;align-items: left;">
+    <div id="piechart3" style="width: 900px; height: 500px;"></div>
+  </div>
+  <div style="display: flex;justify-content: center;align-items: center;">
+    <div id="piechart" style="width: 900px; height: 500px;"></div>
+    <div id="barchart" style="width: 900px; height: 300px;"></div>
+  </div>
+  
+  <div style="display: flex;justify-content: center;align-items: center;">
+    <div id="piechart2" style="width: 900px; height: 500px;"></div>
+ 
+    <div id="barchart2" style="width: 900px; height: 300px;"></div>
+  </div>
+  
+  <br>
+  <br>
+  <br>
+ 
+  <table class="styled-table">
+    <h3>Table Displaying Overdue Defects</h3>
+    <h6>Overdue Criteria : Age(Date_Today-Date_Created) > CVSS Time Limit</h6>
+    <thead>
+      <tr>
+        <th>Dashboard Category</th>
+        <th>CID</th>
+        <th>ART</th>
+        <th>Team Backlog</th>
+        <th>Severity</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>CWE</th>
+        <th>Checker</th>
+        <th>File</th>
+        <th>Action</th>
+        <th>External Reference</th>
+        <th>Baseline</th>
+        <th>First Detected</th>
+      </tr>
+    </thead>
+    {% for _, row in table_od2.iterrows() %}
+    <tbody>
+      {%if row["overdue"]=="Over Due"%}
+
+      <tr style="color:red">
+        <td>{{ row["Dashboard Category"] }}</td>
+        <td>{{ row["CID"] }}</td>
+        <td>{{ row["ART"] }}</td>
+        <td>{{ row["Team Backlog"] }}</td>
+        <td>{{ row["Severity"] }}</td>
+        <td>{{ row["Type"] }}</td>
+        <td>{{ row["Category"] }}</td>
+        <td>{{ row["CWE"] }}</td>
+        <td>{{ row["Checker"] }}</td>
+        <td>{{ row["File"] }}</td>
+        <td>{{ row["Action"] }}</td>
+        <td>{{ row["External Reference"] }}</td>
+        <td>{{ row["Baseline"] }}</td>
+        <td>{{ row["First Detected"] }}</td>
+
+
+
+
+      </tr>
+      {%endif%}
+      {%if row["overdue"]=="On Time"%}
+
+      <tr style="color:green">
+        <td>{{ row["Dashboard Category"] }}</td>
+        <td>{{ row["CID"] }}</td>
+        <td>{{ row["ART"] }}</td>
+        <td>{{ row["Team Backlog"] }}</td>
+        <td>{{ row["Severity"] }}</td>
+        <td>{{ row["Type"] }}</td>
+        <td>{{ row["Category"] }}</td>
+        <td>{{ row["CWE"] }}</td>
+        <td>{{ row["Checker"] }}</td>
+        <td>{{ row["File"] }}</td>
+        <td>{{ row["Action"] }}</td>
+        <td>{{ row["External Reference"] }}</td>
+        <td>{{ row["Baseline"] }}</td>
+        <td>{{ row["First Detected"] }}</td>
+
+
+
+
+      </tr>
+      {%endif%}
+
+    </tbody>
+    {% endfor %}
+  </table>
+ <br>
+ <br>
+  <table class="styled-table">
+    <h3>Table Displaying On Time Defects</h3>
+    <thead>
+      <tr>
+        <th>Dashboard Category</th>
+        <th>CID</th>
+        <th>ART</th>
+        <th>Team Backlog</th>
+        <th>Severity</th>
+        <th>Type</th>
+        <th>Category</th>
+        <th>CWE</th>
+        <th>Checker</th>
+        <th>File</th>
+        <th>Action</th>
+        <th>External Reference</th>
+        <th>Baseline</th>
+        <th>First Detected</th>
+      </tr>
+    </thead>
+    {% for _, row in tables.iterrows() %}
+    <tbody>
+      {%if row["overdue"]=="Over Due"%}
+
+      <tr style="color:red">
+        <td>{{ row["Dashboard Category"] }}</td>
+        <td>{{ row["CID"] }}</td>
+        <td>{{ row["ART"] }}</td>
+        <td>{{ row["Team Backlog"] }}</td>
+        <td>{{ row["Severity"] }}</td>
+        <td>{{ row["Type"] }}</td>
+        <td>{{ row["Category"] }}</td>
+        <td>{{ row["CWE"] }}</td>
+        <td>{{ row["Checker"] }}</td>
+        <td>{{ row["File"] }}</td>
+        <td>{{ row["Action"] }}</td>
+        <td>{{ row["External Reference"] }}</td>
+        <td>{{ row["Baseline"] }}</td>
+        <td>{{ row["First Detected"] }}</td>
+
+
+
+
+      </tr>
+      {%endif%}
+      {%if row["overdue"]=="On Time"%}
+
+      <tr style="color:green">
+        <td>{{ row["Dashboard Category"] }}</td>
+        <td>{{ row["CID"] }}</td>
+        <td>{{ row["ART"] }}</td>
+        <td>{{ row["Team Backlog"] }}</td>
+        <td>{{ row["Severity"] }}</td>
+        <td>{{ row["Type"] }}</td>
+        <td>{{ row["Category"] }}</td>
+        <td>{{ row["CWE"] }}</td>
+        <td>{{ row["Checker"] }}</td>
+        <td>{{ row["File"] }}</td>
+        <td>{{ row["Action"] }}</td>
+        <td>{{ row["External Reference"] }}</td>
+        <td>{{ row["Baseline"] }}</td>
+        <td>{{ row["First Detected"] }}</td>
+
+
+
+
+      </tr>
+      {%endif%}
+
+    </tbody>
+    {% endfor %}
+  </table>
+</div>
+</div>
+</body>
+
+</html>

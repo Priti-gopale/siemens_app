@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <title>Document</title>
+  <script type="text/javascript">
+   
+    
+
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var df2 = '{{df|tojson}}'
+      var df3 = JSON.parse(df2)
+      var arr = []
+      arr.push(["overdue", "Count"])
+      for (var i in df3)
+        arr.push([i, df3[i]])
+
+      var data = google.visualization.arrayToDataTable(arr);
+      var options = {
+        title: 'Overdue Defects'
+      };
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+      chart.draw(data, options);
+     
+
+      var sd2 = '{{sd|tojson}}'
+      var sd3 = JSON.parse(sd2)
+      var arr2 = []
+      arr2.push(["overdue", "Count"])
+      for (var i in sd3)
+        arr2.push([i, sd3[i]])
+
+      var data2 = google.visualization.arrayToDataTable(arr2);
+      var options2 = {
+        title: 'Overdue Defects'
+      };
+      var chart2 = new google.visualization.BarChart(document.getElementById("barchart"));
+      chart2.draw(data2, options2);
+
+    }
+
+  </script>
+</head>
+
+<body>
+    
+  <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+       
+<li class="nav-item ">
+          <a style="color:red"class="nav-link" href="/table">Defects By Age</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/table2">Security Score</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/coverity">Coverity Issues</a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+    <div align="center">
+      <button onclick="window.print()" id="mybutton" class=" btn btn-danger">Export</button>
+      <div class="vis">
+       
+        <div id="visual" class="show">
+          <div id="piechart" style="width: 900px; height: 500px;"></div>
+          <div id="barchart" style="width: 900px; height: 300px;"></div>
+        </div>
+       
+        </div>
+
+        <br>
+        <br>
+        <br>
+        <table class="styled-table">
+          <h3>Table Displaying Overdue Defects</h3>
+          <h6>Overdue Criteria : Age(Date_Today-Date_Created) > CVSS Time Limit</h6>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>CVSS</th>
+              <th>Created date</th>
+            </tr>
+          </thead>
+          {% for _, row in table_od1.iterrows() %}
+          <tbody>
+            {%if row["overdue"]=="Over Due"%}
+  
+            <tr style="color:red">
+              <td>{{ row["ID"] }}</td>
+              <td> {{ row["Title"] }}</td>
+              <td>{{row["CVSS"]}}</td>
+              <td>{{row["Created_date"]}}</td>
+  
+  
+            </tr>
+            {%endif%}
+            {%if row["overdue"]=="On Time"%}
+  
+            <tr style="color:green">
+              <td>{{ row["ID"] }}</td>
+              <td> {{ row["Title"] }}</td>
+              <td>{{row["CVSS"]}}</td>
+              <td>{{row["Created_date"]}}</td>
+  
+  
+            </tr>
+            {%endif%}
+  
+          </tbody>
+          {% endfor %}
+        </table>
+        <br>
+        
+        <br>
+      <table class="styled-table">
+        <h3>Table Displaying On Time Defects</h3>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>CVSS</th>
+            <th>Created date</th>
+          </tr>
+        </thead>
+        {% for _, row in tables.iterrows() %}
+        <tbody>
+          {%if row["overdue"]=="Over Due"%}
+
+          <tr style="color:red">
+            <td>{{ row["ID"] }}</td>
+            <td> {{ row["Title"] }}</td>
+            <td>{{row["CVSS"]}}</td>
+            <td>{{row["Created_date"]}}</td>
+
+
+          </tr>
+          {%endif%}
+          {%if row["overdue"]=="On Time"%}
+
+          <tr style="color:green">
+            <td>{{ row["ID"] }}</td>
+            <td> {{ row["Title"] }}</td>
+            <td>{{row["CVSS"]}}</td>
+            <td>{{row["Created_date"]}}</td>
+
+
+          </tr>
+          {%endif%}
+
+        </tbody>
+        {% endfor %}
+      </table>
+    </div>
+
+
+
+    </div>
+
+</body>
+
+</html>

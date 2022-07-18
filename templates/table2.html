@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<title>Document</title>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <script type="text/javascript">
+
+      $(document).ready(function () {
+ 
+ $('ul.navbar-nav > li')
+         .click(function (e) {
+     $('ul.navbar-nav > li')
+         .removeClass('active');
+     $(this).addClass('active');
+ });
+});
+  
+
+
+ selectval="";
+function setData() {
+     selectval=document.getElementById("security").value;
+    
+       //console.log(selectval);
+     //return selectval;
+     
+   google.charts.load('current', { 'packages': ['corechart', 'gauge'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var df2 = '{{scores|tojson}}'
+      var df3 = JSON.parse(df2)
+      var arr = []
+      arr.push(["AWS Account", "Security Score"])
+      
+      for (var i in df3){
+        console.log(i)
+         console.log(selectval)
+        if(i==selectval){
+            console.log(i);
+            arr.push([i, df3[i]])
+        }
+      }
+   
+    
+
+    
+      var data = google.visualization.arrayToDataTable(arr);
+       
+        var options = {
+          width: 400, height: 400,
+          redFrom: 90, redTo: 100,
+          yellowFrom:75, yellowTo: 90,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+        
+
+
+
+    }
+  
+
+  } 
+
+
+  </script>
+</head>
+<body>
+    
+  <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+      
+<li class="nav-item">
+          <a class="nav-link" href="/table">Defects By Age</a>
+        </li>
+        <li class="nav-item">
+            <a  style="color:red"class="nav-link" href="/table2">Security Score</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/coverity">Coverity Issues</a>
+          </li>
+   
+          
+      </ul>
+    </div>
+  </nav>
+      <div style="margin-top:50px;display: flex;justify-content: center;align-items: center;">
+        <button onclick="window.print()" id="mybutton" class=" btn btn-danger">Export</button>
+      <div  class="select">
+    <select id="security" onchange=setData()>
+        {% for score in scores %}
+            <option value="{{score}}" SELECTED>{{score}}</option>
+        {% endfor %}
+
+    </select>
+</div>
+</div>
+    <div style="margin-top:30px;display: flex;justify-content: center;align-items: center;">
+    <div id="chart_div" ></div>
+    </div>
+    <script>
+        
+    </script>
+</body>
+</html>
